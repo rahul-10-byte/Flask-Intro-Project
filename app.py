@@ -1,9 +1,7 @@
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
-from sqlalchemy import PrimaryKeyConstraint
 
 app = Flask(__name__)
 
@@ -34,8 +32,21 @@ def hello_world():
 
     return render_template('index.html', allTodo = allTodo)
     
+@app.route("/update")
+def update():
+    return "<p>This is second page</p>"
+
+@app.route("/delete/<int:sno>")
+def delete(sno):
+    todo = Todo.query.filter_by(sno=sno).first()
+    db.session.delete(todo)
+    db.session.commit()
+    return redirect("/")
+
+
 @app.route("/products")
 def products():
     return "<p>This is second page</p>"
+
 if __name__ == '__main__':
     app.run(debug=True)
